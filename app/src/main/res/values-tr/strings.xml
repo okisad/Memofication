@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Memofication</string>
+
+    <string name="navigation_drawer_open">Aç navigation drawer</string>
+    <string name="navigation_drawer_close">Kapat navigation drawer</string>
+
+    <string name="action_settings">Ayarlar</string>
+</resources>

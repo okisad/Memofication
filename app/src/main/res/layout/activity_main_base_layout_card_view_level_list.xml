@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/card_view_level_list_card" xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+    style="@style/CardViewLevelListStyle">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corner"
+        android:padding="8dp"
+        >
+
+        <TextView
+            android:id="@+id/card_view_level_list_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="LEVEL"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/card_view_level_list_level_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_view_level_list_level"
+            android:layout_centerHorizontal="true"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            />
+        <LinearLayout
+            android:layout_below="@id/card_view_level_list_level_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/card_view_level_list_first_star"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_full_star"
+                />
+            <ImageView
+                android:id="@+id/card_view_level_list_second_star"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_half_star"
+                />
+            <ImageView
+                android:id="@+id/card_view_level_list_third_star"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_empty_star"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
