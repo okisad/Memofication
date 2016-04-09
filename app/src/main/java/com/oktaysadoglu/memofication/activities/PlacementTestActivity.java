@@ -2,27 +2,19 @@ package com.oktaysadoglu.memofication.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
-import com.oktaysadoglu.memofication.db.UserWords;
-import com.oktaysadoglu.memofication.db.UserWordsDao;
-import com.oktaysadoglu.memofication.db.Word;
-import com.oktaysadoglu.memofication.db.WordDao;
 import com.oktaysadoglu.memofication.events.WordCardViewEvent;
-import com.oktaysadoglu.memofication.fragments.GamePlayFragment;
 import com.oktaysadoglu.memofication.jobs.WriteWordCardJob;
 import com.oktaysadoglu.memofication.model.WordCard;
 
@@ -150,9 +142,15 @@ public class PlacementTestActivity extends AppCompatActivity {
             if(v == null){
                 LayoutInflater inflater = getLayoutInflater();
                 // normally use a viewholder
-                v = inflater.inflate(R.layout.ex_card_view, parent, false);
+                v = inflater.inflate(R.layout.word_card_card_layout, parent, false);
             }
-            ((TextView) v.findViewById(R.id.textView2)).setText(data.get(position).toString());
+            ((TextView) v.findViewById(R.id.word_card_card_layout_main_word_text)).setText(data.get(position).getMainWord().getWord());
+
+            ((Button) v.findViewById(R.id.word_card_card_layout_first_button)).setText(data.get(position).getWords().get(0).getMean());
+            ((Button) v.findViewById(R.id.word_card_card_layout_second_button)).setText(data.get(position).getWords().get(1).getMean());
+            ((Button) v.findViewById(R.id.word_card_card_layout_third_button)).setText(data.get(position).getWords().get(2).getMean());
+            ((Button) v.findViewById(R.id.word_card_card_layout_fourth_button)).setText(data.get(position).getWords().get(3).getMean());
+
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
