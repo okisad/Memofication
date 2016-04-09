@@ -53,7 +53,7 @@ public class PlacementTestActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        for (int i = 1 ; i<=11 ; i++){
+        for (int i = 1 ; i<=10 ; i++){
 
             Memofication.getJobManager().addJobInBackground(new WriteWordCardJob(i));
 
