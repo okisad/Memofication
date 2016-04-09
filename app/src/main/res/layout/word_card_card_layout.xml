@@ -47,7 +47,7 @@
                     android:textAllCaps="false"
                     android:singleLine="false"
                     android:maxLines="2"
-                    android:text="firstsadsadsadasd"/>
+                    android:text="adsadasd"/>
                 <Button
                     android:id="@+id/word_card_card_layout_second_button"
                     android:layout_width="wrap_content"
