@@ -75,7 +75,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textAllCaps="false"
-                    android:text="Hayır"
+                    android:text="Hayırs"
                     android:layout_margin="2dp"
                     />
                 <Button
