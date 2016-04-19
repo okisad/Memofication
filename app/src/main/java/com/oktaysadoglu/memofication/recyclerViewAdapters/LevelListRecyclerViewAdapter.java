@@ -12,13 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oktaysadoglu.memofication.R;
-import com.oktaysadoglu.memofication.activities.GamePlayActivity;
-import com.oktaysadoglu.memofication.activities.LevelActivity;
+import com.oktaysadoglu.memofication.activities.PlacementTestActivity;
 import com.oktaysadoglu.memofication.tools.GetColorFilter;
 
 /**
  * Created by oktaysadoglu on 05/02/16.
  */
+
+//Ana sayfa Level Listesinin Recycler Adapter classı
 public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelListRecyclerViewAdapter.CardViewLevelListHolder> {
 
     public static int START_LEVEL_REQUEST_CODE = 1;
@@ -76,11 +77,12 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
                     Log.e("my","level : " + level);
 
-                    Intent intent = new Intent(fragmentActivity , GamePlayActivity.class);
+                    Intent intent = new Intent(fragmentActivity , PlacementTestActivity.class);
+                    fragmentActivity.startActivity(intent);
 
-                    intent.putExtra("level",level);
+                    /*intent.putExtra("level",level);
 
-                    fragmentActivity.startActivityForResult(intent,START_LEVEL_REQUEST_CODE);
+                    fragmentActivity.startActivityForResult(intent,START_LEVEL_REQUEST_CODE);*/
 
                 }
             });

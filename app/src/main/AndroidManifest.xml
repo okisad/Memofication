@@ -15,7 +15,6 @@
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER"/>
-
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
@@ -24,17 +23,6 @@
             android:label="@string/title_activity_placement_test"
             android:theme="@style/AppTheme">
         </activity>
-        <activity
-            android:name=".activities.LevelActivity"
-            android:label="Oyun Ekranı"
-            android:theme="@style/AppTheme"
-            android:noHistory="true"
-            android:parentActivityName=".activities.MainActivity">
-        </activity>
-        <activity android:name=".activities.GamePlayActivity"
-                  android:label="OyunEkranı"
-                  android:noHistory="true"
-                  android:parentActivityName=".activities.MainActivity"/>
 
     </application>
 

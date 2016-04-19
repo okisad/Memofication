@@ -24,7 +24,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.oktaysadoglu.memofication.R;
-import com.oktaysadoglu.memofication.fragments.AchievementFragment;
 import com.oktaysadoglu.memofication.fragments.LevelListFragment;
 import com.oktaysadoglu.memofication.tools.DialogTools;
 
@@ -124,7 +123,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         if (id == R.id.nav_play) {
             setFragment(LevelListFragment.newInstance());
         } else if (id == R.id.nav_achievement) {
-            /*setFragment(AchievementFragment.newInstance());*/
             Intent intent = new Intent(this,PlacementTestActivity.class);
             startActivity(intent);
         }
