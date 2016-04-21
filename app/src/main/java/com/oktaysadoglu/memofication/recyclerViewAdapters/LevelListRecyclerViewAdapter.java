@@ -2,6 +2,7 @@ package com.oktaysadoglu.memofication.recyclerViewAdapters;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oktaysadoglu.memofication.R;
-import com.oktaysadoglu.memofication.activities.PlacementTestActivity;
+import com.oktaysadoglu.memofication.activities.GameActivity;
+import com.oktaysadoglu.memofication.fragments.AchievementFragment;
 import com.oktaysadoglu.memofication.tools.GetColorFilter;
 
 /**
@@ -57,6 +59,7 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
     }
 
+
     @Override
     public int getItemCount() {
         return 100;
@@ -77,8 +80,17 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
                     Log.e("my","level : " + level);
 
-                    Intent intent = new Intent(fragmentActivity , PlacementTestActivity.class);
+                    Intent intent = new Intent(fragmentActivity , GameActivity.class);
+                    intent.putExtra("level",level);
                     fragmentActivity.startActivity(intent);
+
+                    /*AchievementFragment gameFragment = AchievementFragment.newInstance();
+
+                    gameFragment.setLevel(level);
+
+                    Log.e("my","game  frag level : "+gameFragment.getLevel());
+
+                    fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,gameFragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();*/
 
                     /*intent.putExtra("level",level);
 

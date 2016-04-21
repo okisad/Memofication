@@ -38,12 +38,17 @@ public class WriteWordCardJob extends Job {
 
         super(new Params(1).setRequiresNetwork(false).addTags(String.valueOf(id)).persist());
 
-        mWordCard = new WordCard();
+        synchronized (this){
 
-        this.id = id;
+            mWordCard = new WordCard();
 
-        setMainWord();
+            this.id = id;
+
+            setMainWord();
+
+        }
     }
+
 
     @Override
     public void onAdded() {

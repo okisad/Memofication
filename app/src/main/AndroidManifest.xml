@@ -19,9 +19,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.PlacementTestActivity"
+            android:name=".activities.GameActivity"
             android:label="@string/title_activity_placement_test"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".activities.MainActivity">
         </activity>
 
     </application>

@@ -27,7 +27,11 @@ public class MainActivity extends BaseActivity {
 
     private void setFirstFragment() {
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, LevelListFragment.newInstance()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+        LevelListFragment levelListFragment = LevelListFragment.newInstance();
+
+        setPreviousFragment(levelListFragment);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, levelListFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
 
     }
 

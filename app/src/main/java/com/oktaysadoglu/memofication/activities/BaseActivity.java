@@ -1,7 +1,6 @@
 package com.oktaysadoglu.memofication.activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,6 +23,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.oktaysadoglu.memofication.R;
+import com.oktaysadoglu.memofication.fragments.AchievementFragment;
 import com.oktaysadoglu.memofication.fragments.LevelListFragment;
 import com.oktaysadoglu.memofication.tools.DialogTools;
 
@@ -47,6 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     DrawerLayout mDrawerLayout;
     @Bind(R.id.activity_level_navigation_view)
     NavigationView mNavigationView;
+
+    public Fragment previousFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        mDrawerLayout.setDrawerListener(toggle);
+        mDrawerLayout.addDrawerListener(toggle);
 
         toggle.syncState();
 
@@ -97,9 +99,23 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     }
 
-    private void setFragment(Fragment fragment) {
+    protected void setFragment(Fragment fragment) {
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+        if (!previousFragment.getClass().isInstance(fragment)){
+
+            setPreviousFragment(fragment);
+
+            if (AchievementFragment.class.isInstance(fragment)){
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+
+            }else {
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
+
+            }
+
+        }
 
     }
 
@@ -123,14 +139,17 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         if (id == R.id.nav_play) {
             setFragment(LevelListFragment.newInstance());
         } else if (id == R.id.nav_achievement) {
-            Intent intent = new Intent(this,PlacementTestActivity.class);
-            startActivity(intent);
+            setFragment(AchievementFragment.newInstance());
         }
+
+        /*item.setChecked(true);*/
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
     }
+
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -176,5 +195,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     }
 
     protected abstract int getLayoutResourceId();
+
+    protected void setPreviousFragment(Fragment fragment){
+
+        previousFragment = fragment;
+
+    }
 
 }
