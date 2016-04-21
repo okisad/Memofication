@@ -59,7 +59,7 @@ public class WriteWordCardJob extends Job {
 
         WordCard wordCard = getWordCard();
 
-        Log.e(TAG,"Bİtti");
+        Log.e(TAG,"ok : "+wordCard.getMainWord().getWord());
 
         EventBus.getDefault().post(new WordCardViewEvent(wordCard));
 
@@ -152,8 +152,6 @@ public class WriteWordCardJob extends Job {
             Random random = new Random();
 
             candidateWords = query.list();
-
-            Log.e(TAG,candidateWords.toString());
 
             Word candidateWord = (Word) candidateWords.get(random.nextInt(candidateWords.size()));
 
