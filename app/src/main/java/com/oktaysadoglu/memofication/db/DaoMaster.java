@@ -20,7 +20,8 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
-
+        /*WordDao.createTable(db,ifNotExists);
+        UserWordsDao.createTable(db,ifNotExists);*/
     }
     
     /** Drops underlying database table using DAOs. */

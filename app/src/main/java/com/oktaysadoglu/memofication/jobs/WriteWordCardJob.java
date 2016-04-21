@@ -144,6 +144,7 @@ public class WriteWordCardJob extends Job {
             boolean suitableForArray = true;
 
             QueryBuilder queryBuilder = wordDao.queryBuilder();
+
             queryBuilder.where(WordDao.Properties.Type.eq(mMainWord.getType()),WordDao.Properties.Id.notEq(mMainWord.getId()));
 
             Query query = queryBuilder.build();
@@ -151,6 +152,8 @@ public class WriteWordCardJob extends Job {
             Random random = new Random();
 
             candidateWords = query.list();
+
+            Log.e(TAG,candidateWords.toString());
 
             Word candidateWord = (Word) candidateWords.get(random.nextInt(candidateWords.size()));
 

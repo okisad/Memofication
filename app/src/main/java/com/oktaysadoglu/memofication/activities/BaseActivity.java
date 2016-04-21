@@ -22,10 +22,15 @@ import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.TagConstraint;
+import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
 import com.oktaysadoglu.memofication.fragments.AchievementFragment;
 import com.oktaysadoglu.memofication.fragments.LevelListFragment;
 import com.oktaysadoglu.memofication.tools.DialogTools;
+
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,6 +63,17 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         setContentView(getLayoutResourceId());
 
         ButterKnife.bind(this);
+
+        /*String[] strings = new String[4500];
+
+        for (int i = 1 ; i<=4500 ; i++){
+
+            strings[i-1] = String.valueOf(i);
+
+        }
+
+
+        Memofication.getJobManager().cancelJobs(TagConstraint.ALL,strings);*/
 
         setToolbar();
 

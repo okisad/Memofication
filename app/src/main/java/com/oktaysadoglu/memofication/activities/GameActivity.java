@@ -72,7 +72,7 @@ public class GameActivity extends AppCompatActivity{
 
         Log.e("my","start point : "+startPoint);
 
-        for (int i =startPoint ; i<=startPoint+4; i++){
+        for (int i =startPoint ; i<=startPoint+10; i++){
 
             Memofication.getJobManager().addJobInBackground(new WriteWordCardJob(i));
 
