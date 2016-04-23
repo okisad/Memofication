@@ -44,6 +44,8 @@ public class EvaluationWordCardJob extends Job {
 
         UserWords userWords = userWordsDao.loadByRowId(mMainWordId);
 
+        userWords.setWord(Memofication.getWordDao().load(mMainWordId));
+
         if (truth){
 
             if (userWords.getCount() == -1){

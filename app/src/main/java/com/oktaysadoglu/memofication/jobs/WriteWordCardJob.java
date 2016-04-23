@@ -36,17 +36,14 @@ public class WriteWordCardJob extends Job {
 
     public WriteWordCardJob(long id) {
 
-        super(new Params(1).setRequiresNetwork(false).addTags(String.valueOf(id)).persist());
+        super(new Params(1).setRequiresNetwork(false).addTags("writeWordCard").groupBy("Deck").persist());
 
-        synchronized (this){
+        mWordCard = new WordCard();
 
-            mWordCard = new WordCard();
+        this.id = id;
 
-            this.id = id;
 
-            setMainWord();
 
-        }
     }
 
 
@@ -56,6 +53,8 @@ public class WriteWordCardJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
+
+        setMainWord();
 
         WordCard wordCard = getWordCard();
 
@@ -175,6 +174,8 @@ public class WriteWordCardJob extends Job {
 
         }
 
+        Log.e(TAG,wordsForOptions.toString());
+
         return wordsForOptions;
 
     }
@@ -186,4 +187,6 @@ public class WriteWordCardJob extends Job {
     public void setId(long id) {
         this.id = id;
     }
+
+
 }

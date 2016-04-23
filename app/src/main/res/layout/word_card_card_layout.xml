@@ -38,9 +38,9 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 >
-                <TextView
+                <Button
                     android:id="@+id/word_card_card_layout_first_button"
-                    android:background="@drawable/round_corner"
+                    android:background="@drawable/card_background"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -50,9 +50,9 @@
                     android:textAllCaps="false"
                     android:gravity="center"
                     android:text="first"/>
-                <TextView
+                <Button
                     android:id="@+id/word_card_card_layout_second_button"
-                    android:background="@drawable/round_corner"
+                    android:background="@drawable/card_background"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -69,9 +69,9 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-                <TextView
+                <Button
                     android:id="@+id/word_card_card_layout_third_button"
-                    android:background="@drawable/round_corner"
+                    android:background="@drawable/card_background"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -81,9 +81,9 @@
                     android:textAllCaps="false"
                     android:gravity="center"
                     android:text="third"/>
-                <TextView
+                <Button
                     android:id="@+id/word_card_card_layout_fourth_button"
-                    android:background="@drawable/round_corner"
+                    android:background="@drawable/card_background"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

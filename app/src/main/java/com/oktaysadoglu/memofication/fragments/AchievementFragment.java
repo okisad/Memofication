@@ -6,14 +6,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.oktaysadoglu.memofication.R;
+import android.widget.TextView;
 
+import com.oktaysadoglu.memofication.Memofication;
+import com.oktaysadoglu.memofication.R;
+import com.oktaysadoglu.memofication.db.UserWords;
+import com.oktaysadoglu.memofication.db.UserWordsDao;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
  * Created by oktaysadoglu on 20/04/16.
  */
 public class AchievementFragment extends Fragment {
+
+    @Bind(R.id.textt)
+    TextView mTextView;
 
     public static AchievementFragment newInstance(){
 
@@ -33,6 +42,12 @@ public class AchievementFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_achievement,container,false);
 
         ButterKnife.bind(this,view);
+
+        UserWordsDao userWordsDao = Memofication.getUserWordsDao();
+
+        UserWords userWords = userWordsDao.loadDeep((long) 1);
+
+        mTextView.setText(userWords.toString());
 
         return view;
     }
