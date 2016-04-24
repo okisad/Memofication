@@ -18,13 +18,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="80dp">
+            android:layout_marginBottom="80dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/word_card_card_layout_order_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="1/50"
+                android:gravity="right"/>
 
             <TextView
                 android:id="@+id/word_card_card_layout_main_word_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
                 android:text="Main Word"
                 android:textStyle="bold"

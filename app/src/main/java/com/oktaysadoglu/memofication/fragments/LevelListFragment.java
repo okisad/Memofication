@@ -1,6 +1,5 @@
 package com.oktaysadoglu.memofication.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,6 +18,8 @@ import butterknife.ButterKnife;
  * Created by oktaysadoglu on 05/02/16.
  */
 public class LevelListFragment extends Fragment {
+
+    private static int GRID_LAYOUT_COLUMN_NUMBER = 4;
 
     @Bind(R.id.fragment_level_list_recycler_view)
     RecyclerView mRecyclerView;
@@ -52,7 +53,27 @@ public class LevelListFragment extends Fragment {
     }
     private void setAdapterRecyclerView(){
 
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),4);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), GRID_LAYOUT_COLUMN_NUMBER);
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+                int p = position+1;
+
+                if ((p+1)%10 == 0){
+
+                    return 2;
+
+                }else if (p%10 == 0){
+
+                    return 2;
+
+                }
+
+                return 1;
+            }
+        });
 
         mRecyclerView.setLayoutManager(layoutManager);
 

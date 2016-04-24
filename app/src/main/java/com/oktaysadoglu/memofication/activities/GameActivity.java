@@ -1,6 +1,7 @@
 package com.oktaysadoglu.memofication.activities;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,6 +53,13 @@ public class GameActivity extends AppCompatActivity{
 
     int level;
 
+
+    private static int SWIPE_CARD_SPEED = 250;
+
+    private static int SWIPE_TRUE_CARD_DELAY = 750;
+
+    private static int SWIPE_FALSE_CARD_DELAY = 1250;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,15 +81,10 @@ public class GameActivity extends AppCompatActivity{
     }
 
     public void setSwipeDeckAdapter(int level) {
+
         int startPoint = (level-1)*50 + 1;
 
-        Log.e("my","start point : "+startPoint);
-
-        for (int i =startPoint ; i<startPoint+50; i++){
-
-            Memofication.getJobManager().addJobInBackground(new WriteWordCardJob(i));
-
-        }
+        Memofication.getJobManager().addJobInBackground(new WriteWordCardJob(startPoint,startPoint+50));
 
         swipeDeckAdapter = new SwipeDeckAdapter(wordCards,this);
 
@@ -125,6 +128,7 @@ public class GameActivity extends AppCompatActivity{
 
     @Override
     protected void onStop() {
+
         EventBus.getDefault().unregister(this);
 
         super.onStop();
@@ -136,6 +140,8 @@ public class GameActivity extends AppCompatActivity{
         WordCard wordCard = event.getWordCard();
 
         wordCards.add(wordCard);
+
+        Log.e("my",wordCards.toString());
 
         swipeDeckAdapter.notifyDataSetChanged();
 
@@ -177,6 +183,10 @@ public class GameActivity extends AppCompatActivity{
                 // normally use a viewholder
                 view = inflater.inflate(R.layout.word_card_card_layout, parent, false);
             }
+
+            TextView orderText = (TextView) view.findViewById(R.id.word_card_card_layout_order_text);
+
+            orderText.setText((position+1)+"/50");
 
             TextView mainWordText = (TextView) view.findViewById(R.id.word_card_card_layout_main_word_text);
 
@@ -243,9 +253,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardLeft(250);
+                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
                                 }
-                            },750);
+                            },SWIPE_TRUE_CARD_DELAY);
 
                         }else {
 
@@ -262,9 +272,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardRight(250);
+                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
                                 }
-                            },1250);
+                            },SWIPE_FALSE_CARD_DELAY);
                         }
 
                     }else if (v.getId() == R.id.word_card_card_layout_second_button){
@@ -278,9 +288,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardLeft(250);
+                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
                                 }
-                            },750);
+                            },SWIPE_TRUE_CARD_DELAY);
 
 
                         }else {
@@ -297,9 +307,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardRight(250);
+                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
                                 }
-                            },1250);
+                            },SWIPE_FALSE_CARD_DELAY);
 
                         }
 
@@ -314,9 +324,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardLeft(250);
+                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
                                 }
-                            },750);
+                            },SWIPE_TRUE_CARD_DELAY);
 
 
                         }else {
@@ -334,9 +344,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardRight(250);
+                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
                                 }
-                            },1250);
+                            },SWIPE_FALSE_CARD_DELAY);
 
                         }
 
@@ -351,9 +361,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardLeft(250);
+                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
                                 }
-                            },750);
+                            },SWIPE_TRUE_CARD_DELAY);
 
 
                         }else {
@@ -370,9 +380,9 @@ public class GameActivity extends AppCompatActivity{
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardStack.swipeTopCardRight(250);
+                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
                                 }
-                            },1250);
+                            },SWIPE_FALSE_CARD_DELAY);
 
                         }
 

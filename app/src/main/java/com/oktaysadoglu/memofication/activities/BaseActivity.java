@@ -1,6 +1,7 @@
 package com.oktaysadoglu.memofication.activities;
 
 import android.content.DialogInterface;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -55,6 +56,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     public Fragment previousFragment;
 
+
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -86,6 +94,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         super.onStart();
 
         registerListeners();
+
+        sessionId = UUID.randomUUID().toString();
     }
 
     private void registerListeners() {
@@ -218,4 +228,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Memofication.getJobManager().cancelJobsInBackground(null, TagConstraint.ANY,getSessionId());
+    }
 }

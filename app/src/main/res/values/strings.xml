@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Memofication</string>
 
+    <string name="not_know">I do not know</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

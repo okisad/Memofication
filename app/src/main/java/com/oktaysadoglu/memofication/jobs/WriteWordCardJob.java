@@ -3,9 +3,11 @@ package com.oktaysadoglu.memofication.jobs;
 import android.util.Log;
 
 import com.birbit.android.jobqueue.CancelReason;
+import com.birbit.android.jobqueue.CancelResult;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.birbit.android.jobqueue.TagConstraint;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.db.Word;
 import com.oktaysadoglu.memofication.db.WordDao;
@@ -13,6 +15,7 @@ import com.oktaysadoglu.memofication.events.WordCardViewEvent;
 import com.oktaysadoglu.memofication.model.WordCard;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +37,19 @@ public class WriteWordCardJob extends Job {
 
     private long id;
 
-    public WriteWordCardJob(long id) {
+    private int startPoint;
 
-        super(new Params(1).setRequiresNetwork(false).addTags("writeWordCard").groupBy("Deck").persist());
+    private int endPoint;
 
-        mWordCard = new WordCard();
+    public WriteWordCardJob(int startPoint,int endPoint) {
 
-        this.id = id;
+        super(new Params(1).setRequiresNetwork(false).addTags("writeWordCard").setSingleId("writeWordCard").groupBy("Deck").persist());
 
+        /*this.id = id;*/
 
+        this.startPoint = startPoint;
 
+        this.endPoint = endPoint;
     }
 
 
@@ -54,37 +60,59 @@ public class WriteWordCardJob extends Job {
     @Override
     public void onRun() throws Throwable {
 
-        setMainWord();
+        while (startPoint<endPoint) {
 
-        WordCard wordCard = getWordCard();
+            mWordCard = new WordCard();
 
-        Log.e(TAG,"ok : "+wordCard.getMainWord().getWord());
+            setMainWord();
 
-        EventBus.getDefault().post(new WordCardViewEvent(wordCard));
+            WordCard wordCard = getWordCard();
+
+            startPoint++;
+
+            EventBus.getDefault().post(new WordCardViewEvent(wordCard));
+
+        }
 
     }
-
 
 
     @Override
     protected void onCancel(int cancelReason) {
 
+
     }
 
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount, int maxRunCount) {
-        return RetryConstraint.createExponentialBackoff(runCount,1000);
+        return RetryConstraint.CANCEL;
     }
 
-    private void setMainWord() {
+    private void setMainWord() throws Throwable {
 
-        mMainWord = Memofication.getWordDao().load(id);
+        mMainWord = Memofication.getWordDao().load((long) startPoint);
 
-        mWordCard.setMainWord(mMainWord);
+        if (mMainWord != null) {
+
+            mWordCard.setMainWord(mMainWord);
+
+        } else {
+
+            Memofication.getJobManager().cancelJobsInBackground(null,TagConstraint.ANY,"writeWordCard");
+
+            if (isCancelled()){
+
+                Log.e(TAG,"cancelled");
+
+                throw new Throwable();
+
+            }
+
+        }
 
     }
 
-    private void listControl(List<Integer> integers) {
+    /*private void listControl(List<Integer> integers) {
 
         if (id % 100 == 0) {
 
@@ -108,11 +136,11 @@ public class WriteWordCardJob extends Job {
 
         }
 
-    }
+    }*/
 
     public WordCard getWordCard() {
 
-        List<Word> wordsForOptions = getWordsForOptions();;
+        List<Word> wordsForOptions = getWordsForOptions();
 
         mWordCard.setFirstOptionWord(wordsForOptions.get(0));
         mWordCard.setSecondOptionWord(wordsForOptions.get(1));
@@ -138,13 +166,13 @@ public class WriteWordCardJob extends Job {
 
         List<Word> candidateWords = new ArrayList<>();
 
-        while (i<3){
+        while (i < 3) {
 
             boolean suitableForArray = true;
 
             QueryBuilder queryBuilder = wordDao.queryBuilder();
 
-            queryBuilder.where(WordDao.Properties.Type.eq(mMainWord.getType()),WordDao.Properties.Id.notEq(mMainWord.getId()));
+            queryBuilder.where(WordDao.Properties.Type.eq(mMainWord.getType()), WordDao.Properties.Id.notEq(mMainWord.getId()));
 
             Query query = queryBuilder.build();
 
@@ -154,9 +182,9 @@ public class WriteWordCardJob extends Job {
 
             Word candidateWord = (Word) candidateWords.get(random.nextInt(candidateWords.size()));
 
-            for(int m = 0 ; m < wordsForOptions.size() ; m++){
+            for (int m = 0; m < wordsForOptions.size(); m++) {
 
-                if(candidateWord.getId().equals(wordsForOptions.get(m).getId())){
+                if (candidateWord.getId().equals(wordsForOptions.get(m).getId())) {
 
                     suitableForArray = false;
 
@@ -164,7 +192,7 @@ public class WriteWordCardJob extends Job {
 
             }
 
-            if (suitableForArray){
+            if (suitableForArray) {
 
                 wordsForOptions.add(candidateWord);
 
@@ -174,7 +202,7 @@ public class WriteWordCardJob extends Job {
 
         }
 
-        Log.e(TAG,wordsForOptions.toString());
+        /*Log.e(TAG, wordsForOptions.toString());*/
 
         return wordsForOptions;
 

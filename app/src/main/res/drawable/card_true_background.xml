@@ -7,9 +7,9 @@
 
      android:color="@color/blue_grey_800"/>-->
 
-    <gradient android:centerColor="@color/green_700"
-              android:endColor="@color/green_700"
-              android:startColor="@color/green_700"
+    <gradient android:centerColor="@color/bootstrap_green"
+              android:endColor="@color/bootstrap_green"
+              android:startColor="@color/bootstrap_green"
         />
     <corners
         android:radius="10dp"/>

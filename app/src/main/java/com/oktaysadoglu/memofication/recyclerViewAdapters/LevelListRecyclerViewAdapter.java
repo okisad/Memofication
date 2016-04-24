@@ -26,6 +26,8 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
     public static int START_LEVEL_REQUEST_CODE = 1;
 
+    private static int itemNumber = 100;
+
     private FragmentActivity mFragmentActivity;
 
     public LevelListRecyclerViewAdapter(FragmentActivity fragmentActivity) {
@@ -62,7 +64,7 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
     @Override
     public int getItemCount() {
-        return 100;
+        return itemNumber;
     }
 
     public static class CardViewLevelListHolder extends RecyclerView.ViewHolder{
@@ -78,7 +80,6 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
                 @Override
                 public void onClick(View v) {
 
-                    Log.e("my","level : " + level);
 
                     Intent intent = new Intent(fragmentActivity , GameActivity.class);
                     intent.putExtra("level",level);
