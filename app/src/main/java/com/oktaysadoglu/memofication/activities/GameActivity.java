@@ -1,14 +1,8 @@
 package com.oktaysadoglu.memofication.activities;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
 import com.oktaysadoglu.memofication.events.WordCardViewEvent;
-import com.oktaysadoglu.memofication.jobs.EvaluationWordCardJob;
 import com.oktaysadoglu.memofication.jobs.WriteWordCardJob;
+import com.oktaysadoglu.memofication.listeners.CardButtonClickListener;
 import com.oktaysadoglu.memofication.model.WordCard;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +26,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,12 +43,7 @@ public class GameActivity extends AppCompatActivity{
 
     int level;
 
-
-    private static int SWIPE_CARD_SPEED = 250;
-
-    private static int SWIPE_TRUE_CARD_DELAY = 750;
-
-    private static int SWIPE_FALSE_CARD_DELAY = 1250;
+    private boolean reverse = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +60,8 @@ public class GameActivity extends AppCompatActivity{
         getSupportActionBar().setTitle("Memofication");
 
         level = getIntent().getIntExtra("level",0);
+
+        reverse = getIntent().getBooleanExtra("reverse",false);
 
         setSwipeDeckAdapter(level);
 
@@ -145,8 +132,6 @@ public class GameActivity extends AppCompatActivity{
 
         wordCards.add(wordCard);
 
-        Log.e("my",wordCards.toString());
-
         swipeDeckAdapter.notifyDataSetChanged();
 
     }
@@ -178,222 +163,52 @@ public class GameActivity extends AppCompatActivity{
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-
-
-
             View view = convertView;
             if(view == null){
                 LayoutInflater inflater = getLayoutInflater();
-                // normally use a viewholder
                 view = inflater.inflate(R.layout.word_card_card_layout, parent, false);
             }
 
             TextView orderText = (TextView) view.findViewById(R.id.word_card_card_layout_order_text);
 
-            orderText.setText((position+1)+"/50");
-
             TextView mainWordText = (TextView) view.findViewById(R.id.word_card_card_layout_main_word_text);
 
-            mainWordText.setText(data.get(position).getMainWord().getWord());
+            WordCard wordCard = data.get(position);
 
-            final WordCard wordCard = data.get(position);
+            Button firstOption = (Button) view.findViewById(R.id.word_card_card_layout_first_button);
+            Button secondOption = (Button) view.findViewById(R.id.word_card_card_layout_second_button);
+            Button thirdOption = (Button) view.findViewById(R.id.word_card_card_layout_third_button);
+            Button fourthOption = (Button) view.findViewById(R.id.word_card_card_layout_fourth_button);
 
-            final Button firstOption = (Button) view.findViewById(R.id.word_card_card_layout_first_button);
-            final Button secondOption = (Button) view.findViewById(R.id.word_card_card_layout_second_button);
-            final Button thirdOption = (Button) view.findViewById(R.id.word_card_card_layout_third_button);
-            final Button fourthOption = (Button) view.findViewById(R.id.word_card_card_layout_fourth_button);
+            List<Button> buttonsBundle = new ArrayList<>();
+            buttonsBundle.add(firstOption);
+            buttonsBundle.add(secondOption);
+            buttonsBundle.add(thirdOption);
+            buttonsBundle.add(fourthOption);
 
+            orderText.setText((position+1)+"/50");
 
+            if (reverse){
 
-            firstOption.setText(data.get(position).getWords().get(0).getMean());
-            secondOption.setText(data.get(position).getWords().get(1).getMean());
-            thirdOption.setText(data.get(position).getWords().get(2).getMean());
-            fourthOption.setText(data.get(position).getWords().get(3).getMean());
+                mainWordText.setText(data.get(position).getMainWord().getMean());
 
-            View.OnClickListener onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                firstOption.setText(data.get(position).getWords().get(0).getWord());
+                secondOption.setText(data.get(position).getWords().get(1).getWord());
+                thirdOption.setText(data.get(position).getWords().get(2).getWord());
+                fourthOption.setText(data.get(position).getWords().get(3).getWord());
 
-                    Button trueAnswerWhichOption = null;
 
-                    Handler handler = new Handler();
+            }else {
 
-                    int mainID = (int) (long) wordCard.getMainWord().getId();
+                mainWordText.setText(data.get(position).getMainWord().getWord());
 
-                    int firstID = (int) (long) wordCard.getWords().get(0).getId();
+                firstOption.setText(data.get(position).getWords().get(0).getMean());
+                secondOption.setText(data.get(position).getWords().get(1).getMean());
+                thirdOption.setText(data.get(position).getWords().get(2).getMean());
+                fourthOption.setText(data.get(position).getWords().get(3).getMean());
+            }
 
-                    int secondID =(int) (long) wordCard.getWords().get(1).getId();
-
-                    int thirdID = (int) (long) wordCard.getWords().get(2).getId();
-
-                    int fourthID = (int) (long) wordCard.getWords().get(3).getId();
-
-                    if (mainID == firstID){
-
-                        trueAnswerWhichOption = firstOption;
-
-                    }else if (mainID == secondID){
-
-                        trueAnswerWhichOption = secondOption;
-
-                    }else if (mainID == thirdID){
-
-                        trueAnswerWhichOption = thirdOption;
-
-                    }else if (mainID == fourthID){
-
-                        trueAnswerWhichOption = fourthOption;
-
-                    }
-
-                    if(v.getId() == R.id.word_card_card_layout_first_button){
-
-                        if (mainID == firstID){
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,true));
-
-                            firstOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_TRUE_CARD_DELAY);
-
-                        }else {
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,false));
-
-                            firstOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_false_background));
-
-                            if( trueAnswerWhichOption != null){
-
-                                trueAnswerWhichOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            }
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_FALSE_CARD_DELAY);
-                        }
-
-                    }else if (v.getId() == R.id.word_card_card_layout_second_button){
-
-                        if (mainID == secondID){
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,true));
-
-                            secondOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_TRUE_CARD_DELAY);
-
-
-                        }else {
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,false));
-                            secondOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_false_background));
-
-                            if( trueAnswerWhichOption != null){
-
-                                trueAnswerWhichOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            }
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_FALSE_CARD_DELAY);
-
-                        }
-
-                    }else if (v.getId() == R.id.word_card_card_layout_third_button){
-
-                        if (mainID == thirdID){
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,true));
-
-                            thirdOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_TRUE_CARD_DELAY);
-
-
-                        }else {
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,false));
-
-                            thirdOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_false_background));
-
-                            if( trueAnswerWhichOption != null){
-
-                                trueAnswerWhichOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            }
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_FALSE_CARD_DELAY);
-
-                        }
-
-                    }else if (v.getId() == R.id.word_card_card_layout_fourth_button){
-
-                        if (mainID == fourthID){
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,true));
-
-                            fourthOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardLeft(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_TRUE_CARD_DELAY);
-
-
-                        }else {
-
-                            Memofication.getJobManager().addJobInBackground(new EvaluationWordCardJob((long) mainID,false));
-                            fourthOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_false_background));
-
-                            if( trueAnswerWhichOption != null){
-
-                                trueAnswerWhichOption.setBackground(ContextCompat.getDrawable(GameActivity.this,R.drawable.card_true_background));
-
-                            }
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardStack.swipeTopCardRight(SWIPE_CARD_SPEED);
-                                }
-                            },SWIPE_FALSE_CARD_DELAY);
-
-                        }
-
-                    }
-
-                }
-            };
+            View.OnClickListener onClickListener = new CardButtonClickListener(wordCard,buttonsBundle,parent,GameActivity.this,cardStack);
 
             firstOption.setOnClickListener(onClickListener);
             secondOption.setOnClickListener(onClickListener);

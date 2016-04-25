@@ -82,20 +82,9 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
 
                     Intent intent = new Intent(fragmentActivity , GameActivity.class);
+                    intent.putExtra("reverse",false);
                     intent.putExtra("level",level);
                     fragmentActivity.startActivity(intent);
-
-                    /*AchievementFragment gameFragment = AchievementFragment.newInstance();
-
-                    gameFragment.setLevel(level);
-
-                    Log.e("my","game  frag level : "+gameFragment.getLevel());
-
-                    fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,gameFragment).addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();*/
-
-                    /*intent.putExtra("level",level);
-
-                    fragmentActivity.startActivityForResult(intent,START_LEVEL_REQUEST_CODE);*/
 
                 }
             });
