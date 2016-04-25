@@ -7,14 +7,35 @@
     card_view:cardCornerRadius="6dp"
     card_view:cardElevation="10dp"
     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:alpha="1"
+        android:layout_marginTop="130dp"
+        android:elevation="1dp">
+        <ImageView
+            android:layout_weight="1"
+            android:id="@+id/left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/idontknow"
+            />
+        <ImageView
+            android:layout_weight="1"
+            android:id="@+id/right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/idontknow"
+            />
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/blue_grey_50"
         android:minHeight="600dp"
         android:orientation="vertical">
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

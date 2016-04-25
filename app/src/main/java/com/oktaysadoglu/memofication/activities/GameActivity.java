@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,6 @@ public class GameActivity extends AppCompatActivity{
     SwipeDeck cardStack;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
     SwipeDeckAdapter swipeDeckAdapter;
 
     ArrayList<WordCard> wordCards = new ArrayList<>();
@@ -117,6 +117,10 @@ public class GameActivity extends AppCompatActivity{
             }
         });
 
+
+        cardStack.setLeftImage(R.id.left_image);
+
+        cardStack.setRightImage(R.id.right_image);
     }
 
     @Override
