@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        /*Schema schema = new Schema(1,"com.oktaysadoglu.memofication.db");
+        Schema schema = new Schema(1,"com.oktaysadoglu.memofication.db");
 
         Entity word = schema.addEntity("Word");
 
@@ -31,9 +31,13 @@ public class Main {
         userWords.addIntProperty("is_on_notification");
         userWords.addToOne(word, userWordId);
 
+        Entity lastWordNumber = schema.addEntity("LastWordNumber");
+
+        lastWordNumber.addIdProperty();
+        lastWordNumber.addIntProperty("last_number");
+
         DaoGenerator daoGenerator = new DaoGenerator();
         daoGenerator.generateAll(schema,"./app/src/main/java");
-*/
 
         /*List<Integer> integers = new ArrayList<>();
 
@@ -79,7 +83,7 @@ public class Main {
         System.out.println(integers);*/
 
 
-        int size = 0;
+       /* int size = 0;
 
         int lowerBound = 40;
 
@@ -103,7 +107,7 @@ public class Main {
 
         }
 
-        System.out.println(size);
+        System.out.println(size);*/
 
     }
 

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
+import com.oktaysadoglu.memofication.db.LastWordNumber;
+import com.oktaysadoglu.memofication.db.LastWordNumberDao;
 import com.oktaysadoglu.memofication.db.UserWords;
 import com.oktaysadoglu.memofication.db.UserWordsDao;
 
@@ -43,11 +45,11 @@ public class AchievementFragment extends Fragment {
 
         ButterKnife.bind(this,view);
 
-        UserWordsDao userWordsDao = Memofication.getUserWordsDao();
+        LastWordNumberDao lastWordNumberDao = Memofication.getLastWordNumberDao();
 
-        UserWords userWords = userWordsDao.loadDeep((long) 1);
+        LastWordNumber lastWordNumber = lastWordNumberDao.load((long) 1);
 
-        mTextView.setText(userWords.toString());
+        mTextView.setText(lastWordNumber.toString());
 
         return view;
     }

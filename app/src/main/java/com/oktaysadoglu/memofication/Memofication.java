@@ -11,6 +11,7 @@ import com.birbit.android.jobqueue.log.CustomLogger;
 import com.oktaysadoglu.memofication.db.DaoMaster;
 import com.oktaysadoglu.memofication.db.DaoSession;
 import com.oktaysadoglu.memofication.db.DictionaryHelper;
+import com.oktaysadoglu.memofication.db.LastWordNumberDao;
 import com.oktaysadoglu.memofication.db.UserWordsDao;
 import com.oktaysadoglu.memofication.db.WordDao;
 
@@ -27,6 +28,8 @@ public class Memofication extends Application{
 
     private static UserWordsDao mUserWordsDao;
 
+    private static LastWordNumberDao mLastWordNumberDao;
+
     private static JobManager mJobManager;
 
     public static WordDao getWordDao() {
@@ -39,6 +42,10 @@ public class Memofication extends Application{
 
     public static JobManager getJobManager() {
         return mJobManager;
+    }
+
+    public static LastWordNumberDao getLastWordNumberDao() {
+        return mLastWordNumberDao;
     }
 
     @Override
@@ -123,6 +130,8 @@ public class Memofication extends Application{
         mWordDao = daoSession.getWordDao();
 
         mUserWordsDao = daoSession.getUserWordsDao();
+
+        mLastWordNumberDao = daoSession.getLastWordNumberDao();
 
     }
 
