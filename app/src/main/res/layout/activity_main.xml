@@ -51,12 +51,28 @@
                 android:layout_height="100dp"
                 android:layout_margin="5dp">
                 <TextView
-                    android:id="@+id/activity_main_navigation_view_notification_on_off_text"
+                    android:id="@+id/activity_main_navigation_view_is_reverse_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:text="Reverse"
                     android:textSize="16sp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
+                    />
+                <Switch
+                    android:id="@+id/activity_main_navigation_view_is_reverse_switch"
+                    android:layout_toRightOf="@id/activity_main_navigation_view_is_reverse_text"
+                    android:layout_alignBottom="@id/activity_main_navigation_view_is_reverse_text"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/activity_main_navigation_view_notification_on_off_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/activity_main_navigation_view_is_reverse_text"
+                    android:textSize="16sp"
+                    android:layout_marginTop="15dp"
                     android:text="Notifacation On/Off"/>
                 <Switch
                     android:id="@+id/activity_main_navigation_view_notification_switch"
@@ -71,10 +87,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/activity_main_navigation_view_notification_on_off_text"
                     android:textSize="16sp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="15dp"
                     android:text="Number Of Notifacatios"/>
                 <Button
-                    android:id="@+id/activity_main_navigation_view_notification_number_button"
+                    android:id="@+id/activity_main_navigation_view_number_of_notification_button"
                     android:layout_width="35dp"
                     android:layout_marginRight="5dp"
                     android:layout_height="30dp"

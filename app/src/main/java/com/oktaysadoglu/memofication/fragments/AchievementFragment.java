@@ -2,18 +2,21 @@ package com.oktaysadoglu.memofication.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
 import com.oktaysadoglu.memofication.db.LastWordNumber;
 import com.oktaysadoglu.memofication.db.LastWordNumberDao;
-import com.oktaysadoglu.memofication.db.UserWords;
-import com.oktaysadoglu.memofication.db.UserWordsDao;
+import com.oktaysadoglu.memofication.db.Word;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,10 +24,14 @@ import butterknife.ButterKnife;
 /**
  * Created by oktaysadoglu on 20/04/16.
  */
-public class AchievementFragment extends Fragment {
+public class AchievementFragment extends BaseFragment {
+
+    public static String fragmentName = "AchievementFragment";
 
     @Bind(R.id.textt)
     TextView mTextView;
+
+    private boolean isLevelListFragment;
 
     public static AchievementFragment newInstance(){
 
@@ -35,6 +42,8 @@ public class AchievementFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setLevelListFragment(false);
     }
 
     @Nullable
@@ -49,7 +58,21 @@ public class AchievementFragment extends Fragment {
 
         LastWordNumber lastWordNumber = lastWordNumberDao.load((long) 1);
 
-        mTextView.setText(lastWordNumber.toString());
+        Firebase ref = new Firebase("https://fiery-heat-3668.firebaseio.com");
+// Attach an listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Word post = postSnapshot.getValue(Word.class);
+                    mTextView.setText(post.getWord());
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
 
         return view;
     }
@@ -66,4 +89,23 @@ public class AchievementFragment extends Fragment {
         super.onStop();
     }
 
+    @Override
+    public void setNavigationCheckedItem(NavigationView navigationView) {
+        navigationView.setCheckedItem(R.id.nav_achievement);
+    }
+
+    @Override
+    public String getFragmentName() {
+        return fragmentName;
+    }
+
+    @Override
+    public boolean isLevelListFragment() {
+        return this.isLevelListFragment;
+    }
+
+    @Override
+    public void setLevelListFragment(boolean isLevelListFragment) {
+        this.isLevelListFragment = isLevelListFragment;
+    }
 }

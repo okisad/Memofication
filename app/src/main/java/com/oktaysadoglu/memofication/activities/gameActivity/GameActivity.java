@@ -1,23 +1,17 @@
-package com.oktaysadoglu.memofication.activities;
+package com.oktaysadoglu.memofication.activities.gameActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
+import com.oktaysadoglu.memofication.activities.gameActivity.adapters.SwipeDeckAdapter;
 import com.oktaysadoglu.memofication.events.WordCardViewEvent;
 import com.oktaysadoglu.memofication.jobs.WriteWordCardJob;
-import com.oktaysadoglu.memofication.listeners.CardButtonClickListener;
 import com.oktaysadoglu.memofication.model.WordCard;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,25 +19,38 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class GameActivity extends AppCompatActivity{
-
+/**
+ * Created by oktaysadoglu on 10/05/16.
+ */
+public abstract class GameActivity extends AppCompatActivity {
 
     @Bind(R.id.swipe_deck)
     SwipeDeck cardStack;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    SwipeDeckAdapter swipeDeckAdapter;
 
-    ArrayList<WordCard> wordCards = new ArrayList<>();
+    private SwipeDeckAdapter swipeDeckAdapter;
 
-    int level;
+    private ArrayList<WordCard> wordCards = new ArrayList<>();
 
-    private boolean reverse = false;
+    private int level;
+
+    public SwipeDeckAdapter getSwipeDeckAdapter() {
+        return swipeDeckAdapter;
+    }
+
+    public static Class newClass(boolean reverse){
+
+        if (reverse)
+            return GameActivityReverse.class;
+        else
+            return GameActivityStraight.class;
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,62 +60,33 @@ public class GameActivity extends AppCompatActivity{
 
         ButterKnife.bind(this);
 
+        setToolbar();
+
+        setInitialVariables();
+
+        setSwipeDeckAdapter(getLevel());
+
+    }
+
+    private void setToolbar(){
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportActionBar().setTitle("Memofication");
 
-        level = getIntent().getIntExtra("level",0);
+    }
 
-        reverse = getIntent().getBooleanExtra("reverse",false);
+    private void setInitialVariables(){
 
-        setSwipeDeckAdapter(level);
+        setLevel(getIntent().getIntExtra("level",0));
 
     }
 
-    public void setSwipeDeckAdapter(int level) {
+    public abstract void setSwipeDeckAdapter(int level);
 
-        int startPoint = (level-1)*50 + 1;
-
-        Memofication.getJobManager().addJobInBackground(new WriteWordCardJob(startPoint,startPoint+50));
-
-        swipeDeckAdapter = new SwipeDeckAdapter(wordCards,this);
-
-        cardStack.setAdapter(swipeDeckAdapter);
-
-        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-            @Override
-            public void cardSwipedLeft(int position) {
-                Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
-            }
-
-            @Override
-            public void cardSwipedRight(int position) {
-                Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
-            }
-
-            @Override
-            public void cardsDepleted() {
-                Log.i("MainActivity", "no more cards");
-            }
-
-            @Override
-            public void cardActionDown() {
-
-            }
-
-            @Override
-            public void cardActionUp() {
-
-            }
-        });
-
-
-        cardStack.setLeftImage(R.id.left_image);
-
-        cardStack.setRightImage(R.id.right_image);
-    }
+    public abstract void fillWordAndOptions(View view, int position);
 
     @Override
     protected void onStart() {
@@ -136,7 +114,7 @@ public class GameActivity extends AppCompatActivity{
 
     }
 
-    public class SwipeDeckAdapter extends BaseAdapter {
+    /*public class SwipeDeckAdapter extends BaseAdapter {
 
         private List<WordCard> data;
         private Context context;
@@ -208,7 +186,7 @@ public class GameActivity extends AppCompatActivity{
                 fourthOption.setText(data.get(position).getWords().get(3).getMean());
             }
 
-            View.OnClickListener onClickListener = new CardButtonClickListener(wordCard,buttonsBundle,parent,GameActivity.this,cardStack);
+            View.OnClickListener onClickListener = new CardButtonClickListener(wordCard,buttonsBundle,parent,GameActivityStraight.this,cardStack);
 
             firstOption.setOnClickListener(onClickListener);
             secondOption.setOnClickListener(onClickListener);
@@ -217,6 +195,29 @@ public class GameActivity extends AppCompatActivity{
 
             return view;
         }
+    }*/
+
+    public ArrayList<WordCard> getWordCards() {
+        return wordCards;
     }
 
+    public void setWordCards(ArrayList<WordCard> wordCards) {
+        this.wordCards = wordCards;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public SwipeDeck getCardStack() {
+        return cardStack;
+    }
+
+    public void setSwipeDeckAdapter(SwipeDeckAdapter swipeDeckAdapter) {
+        this.swipeDeckAdapter = swipeDeckAdapter;
+    }
 }

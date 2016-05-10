@@ -1,7 +1,6 @@
 package com.oktaysadoglu.memofication;
 
 import android.app.Application;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -17,58 +16,44 @@ import com.oktaysadoglu.memofication.db.WordDao;
 
 import java.io.IOException;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-
 /**
  * Created by oktaysadoglu on 04/02/16.
  */
 public class Memofication extends Application{
 
-    private static WordDao mWordDao;
+    private static WordDao wordDao;
 
-    private static UserWordsDao mUserWordsDao;
+    private static UserWordsDao userWordsDao;
 
-    private static LastWordNumberDao mLastWordNumberDao;
+    private static LastWordNumberDao lastWordNumberDao;
 
-    private static JobManager mJobManager;
+    private static JobManager jobManager;
 
     public static WordDao getWordDao() {
-        return mWordDao;
+        return wordDao;
     }
 
     public static UserWordsDao getUserWordsDao() {
-        return mUserWordsDao;
+        return userWordsDao;
     }
 
     public static JobManager getJobManager() {
-        return mJobManager;
+        return jobManager;
     }
 
     public static LastWordNumberDao getLastWordNumberDao() {
-        return mLastWordNumberDao;
+        return lastWordNumberDao;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        /*prepareCalligraphy();*/
-
         configureJobManager();
 
         prepareDatabase();
 
     }
-
-    /*private void prepareCalligraphy(){
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
-                        .setFontAttrId(R.attr.fontPath)
-                        .build()
-        );
-
-    }*/
 
     private void configureJobManager(){
 
@@ -100,8 +85,13 @@ public class Memofication extends Application{
                 .loadFactor(3)//3 jobs per consumer
                 .consumerKeepAlive(120)//wait 2 minute
                 .build();
-        mJobManager = new JobManager(configuration);
 
+        jobManager = new JobManager(configuration);
+
+    }
+
+    public static void setJobManager(JobManager jobManager) {
+        Memofication.jobManager = jobManager;
     }
 
     private void prepareDatabase(){
@@ -110,14 +100,8 @@ public class Memofication extends Application{
 
         try {
             helper.createDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             helper.openDataBase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (java.sql.SQLException e) {
+        } catch (IOException|java.sql.SQLException e) {
             e.printStackTrace();
         }
 
@@ -127,11 +111,17 @@ public class Memofication extends Application{
 
         DaoSession daoSession = daoMaster.newSession();
 
-        mWordDao = daoSession.getWordDao();
+        assignDaoClasses(daoSession);
 
-        mUserWordsDao = daoSession.getUserWordsDao();
+    }
 
-        mLastWordNumberDao = daoSession.getLastWordNumberDao();
+    private void assignDaoClasses(DaoSession daoSession){
+
+        wordDao = daoSession.getWordDao();
+
+        userWordsDao = daoSession.getUserWordsDao();
+
+        lastWordNumberDao = daoSession.getLastWordNumberDao();
 
     }
 

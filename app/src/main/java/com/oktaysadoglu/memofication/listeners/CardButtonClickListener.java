@@ -11,8 +11,6 @@ import android.widget.Button;
 import com.daprlabs.cardstack.SwipeDeck;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
-import com.oktaysadoglu.memofication.activities.GameActivity;
-import com.oktaysadoglu.memofication.db.Word;
 import com.oktaysadoglu.memofication.jobs.EvaluationWordCardJob;
 import com.oktaysadoglu.memofication.model.WordCard;
 

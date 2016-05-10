@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:background="@color/blue_grey_50"
         android:fitsSystemWindows="true"
-        tools:context=".activities.GameActivity">
+        tools:context=".activities.gameActivityStraight.GameActivityStraight">
 
         <com.daprlabs.cardstack.SwipeFrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

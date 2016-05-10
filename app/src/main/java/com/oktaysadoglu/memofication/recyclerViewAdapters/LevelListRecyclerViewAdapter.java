@@ -2,10 +2,8 @@ package com.oktaysadoglu.memofication.recyclerViewAdapters;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oktaysadoglu.memofication.R;
-import com.oktaysadoglu.memofication.activities.GameActivity;
-import com.oktaysadoglu.memofication.fragments.AchievementFragment;
+import com.oktaysadoglu.memofication.activities.gameActivity.GameActivity;
+import com.oktaysadoglu.memofication.activities.gameActivity.GameActivityReverse;
+import com.oktaysadoglu.memofication.activities.gameActivity.GameActivityStraight;
+import com.oktaysadoglu.memofication.preferences.ReversePreferences;
 import com.oktaysadoglu.memofication.tools.GetColorFilter;
 
 /**
@@ -81,10 +81,12 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
                 public void onClick(View v) {
 
 
-                    Intent intent = new Intent(fragmentActivity , GameActivity.class);
-                    intent.putExtra("reverse",false);
+                    Intent intent = new Intent(fragmentActivity, GameActivity.newClass(ReversePreferences.isReverse(fragmentActivity)));
                     intent.putExtra("level",level);
                     fragmentActivity.startActivity(intent);
+
+                    /*Intent intent = new Intent(fragmentActivity, TestActivity.class);
+                    fragmentActivity.startActivity(intent);*/
 
                 }
             });
