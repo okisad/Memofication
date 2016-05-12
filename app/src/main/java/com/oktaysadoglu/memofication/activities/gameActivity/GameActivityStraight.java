@@ -53,6 +53,7 @@ public class GameActivityStraight extends GameActivity {
                 public void cardActionUp() {
 
                 }
+
             });
 
 

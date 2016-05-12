@@ -1,4 +1,4 @@
-package com.oktaysadoglu.memofication.jobs;
+package com.oktaysadoglu.memofication.jobs.evaluationWordCard;
 
 import android.util.Log;
 
@@ -13,22 +13,18 @@ import com.oktaysadoglu.memofication.db.UserWordsDao;
 /**
  * Created by oktaysadoglu on 11/02/16.
  */
-public class EvaluationWordCardJob extends Job {
+public abstract class EvaluationWordCardJob extends Job {
 
     public static String TAG = "EvaluationWordCardJob";
 
     public static final int PRIORITY = 1;
 
-    private long mMainWordId;
+    private long mainWordId;
 
-    private boolean truth;
-
-    public EvaluationWordCardJob(long mainWordId,boolean truth) {
+    public EvaluationWordCardJob(long mainWordId) {
         super(new Params(PRIORITY).setRequiresNetwork(false).addTags(TAG).persist());
 
-        mMainWordId = mainWordId;
-
-        this.truth = truth;
+        this.mainWordId = mainWordId;
 
     }
 
@@ -37,14 +33,16 @@ public class EvaluationWordCardJob extends Job {
 
     }
 
-    @Override
+
+
+   /* @Override
     public void onRun() throws Throwable {
 
         UserWordsDao userWordsDao = Memofication.getUserWordsDao();
 
-        UserWords userWords = userWordsDao.loadByRowId(mMainWordId);
+        UserWords userWords = userWordsDao.loadByRowId(mainWordId);
 
-        userWords.setWord(Memofication.getWordDao().load(mMainWordId));
+        userWords.setWord(Memofication.getWordDao().load(mainWordId));
 
         if (truth){
 
@@ -84,8 +82,8 @@ public class EvaluationWordCardJob extends Job {
 
         userWords.update();
 
-        Log.e("my",userWordsDao.loadByRowId(mMainWordId).toString());
-    }
+        Log.e("my",userWordsDao.loadByRowId(mainWordId).toString());
+    }*/
 
     @Override
     protected void onCancel(int cancelReason) {
@@ -97,4 +95,12 @@ public class EvaluationWordCardJob extends Job {
         return null;
     }
 
+
+    public long getMainWordId() {
+        return mainWordId;
+    }
+
+    public void setMainWordId(long mainWordId) {
+        this.mainWordId = mainWordId;
+    }
 }

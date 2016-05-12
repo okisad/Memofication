@@ -1,10 +1,12 @@
 package com.oktaysadoglu.memofication.activities.baseActivity.listeners;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.view.MenuItem;
 
 import com.oktaysadoglu.memofication.R;
+import com.oktaysadoglu.memofication.activities.TestActivity;
 import com.oktaysadoglu.memofication.activities.baseActivity.BaseActivity;
 import com.oktaysadoglu.memofication.fragments.AchievementFragment;
 import com.oktaysadoglu.memofication.fragments.LevelListFragment;
@@ -41,7 +43,11 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
 
         }else if (id == R.id.nav_achievement){
 
-            getBaseActivity().setFragment(AchievementFragment.newInstance());
+            /*getBaseActivity().setFragment(AchievementFragment.newInstance());*/
+
+            Intent intent = new Intent(getBaseActivity(), TestActivity.class);
+
+            getBaseActivity().startActivity(intent);
 
         }
 

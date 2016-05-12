@@ -24,8 +24,6 @@ import com.oktaysadoglu.memofication.tools.GetColorFilter;
 //Ana sayfa Level Listesinin Recycler Adapter classı
 public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelListRecyclerViewAdapter.CardViewLevelListHolder> {
 
-    public static int START_LEVEL_REQUEST_CODE = 1;
-
     private static int itemNumber = 100;
 
     private FragmentActivity mFragmentActivity;
@@ -61,7 +59,6 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
 
     }
 
-
     @Override
     public int getItemCount() {
         return itemNumber;
@@ -80,13 +77,9 @@ public class LevelListRecyclerViewAdapter extends RecyclerView.Adapter<LevelList
                 @Override
                 public void onClick(View v) {
 
-
                     Intent intent = new Intent(fragmentActivity, GameActivity.newClass(ReversePreferences.isReverse(fragmentActivity)));
                     intent.putExtra("level",level);
                     fragmentActivity.startActivity(intent);
-
-                    /*Intent intent = new Intent(fragmentActivity, TestActivity.class);
-                    fragmentActivity.startActivity(intent);*/
 
                 }
             });

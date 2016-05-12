@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import com.birbit.android.jobqueue.TagConstraint;
-import com.firebase.client.Firebase;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
 import com.oktaysadoglu.memofication.activities.baseActivity.listeners.NavigationItemSelectedListener;
@@ -58,8 +57,6 @@ public abstract class BaseActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        Firebase.setAndroidContext(this);
 
         setContentView(getLayoutResourceId());
 
@@ -108,7 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity{
 
         toggle.setReverseSwitchButton(getReverseSwitchButton());
 
-        getDrawerLayout().addDrawerListener(toggle);
+        getDrawerLayout().setDrawerListener(toggle);
 
         toggle.syncState();
 

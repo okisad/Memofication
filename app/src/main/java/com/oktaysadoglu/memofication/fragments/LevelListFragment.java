@@ -70,16 +70,10 @@ public class LevelListFragment extends BaseFragment {
 
                 int p = position+1;
 
-                if ((p+1)%10 == 0){
-
+                if ((p+1)%10 == 0)
                     return 2;
-
-                }else if (p%10 == 0){
-
+                else if (p%10 == 0)
                     return 2;
-
-                }
-
                 return 1;
             }
         });

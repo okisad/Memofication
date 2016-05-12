@@ -57,4 +57,19 @@ public class Word {
         this.type = type;
     }
 
+    public int getIntId(){
+
+        return (int) (long) id;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Word{" +
+                "id=" + id +
+                ", word='" + word + '\'' +
+                ", mean='" + mean + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package com.oktaysadoglu.memofication.model;
 
+import android.util.Log;
+
 import com.oktaysadoglu.memofication.db.Word;
 
 import java.io.Serializable;
@@ -22,7 +24,21 @@ public class WordCard implements Serializable{
 
     private Word fourthOptionWord;
 
-    private List<Word> mWords;
+    private List<Word> words;
+
+    public WordCard() {
+    }
+
+    public WordCard(Word mainWord) {
+        this.mainWord = mainWord;
+        this.firstOptionWord = mainWord;
+        this.secondOptionWord = mainWord;
+        this.thirdOptionWord = mainWord;
+        this.fourthOptionWord = mainWord;
+
+        shuffle();
+
+    }
 
     public Word getMainWord() {
         return mainWord;
@@ -65,30 +81,31 @@ public class WordCard implements Serializable{
     }
 
     public List<Word> getWords() {
-        return mWords;
+        return words;
     }
 
     public void setWords(List<Word> words) {
-        mWords = words;
+        this.words = words;
     }
 
     public void shuffle(){
 
-        mWords = new ArrayList<>();
+        words = new ArrayList<>();
 
-        mWords.add(getFirstOptionWord());
-        mWords.add(getSecondOptionWord());
-        mWords.add(getThirdOptionWord());
-        mWords.add(getFourthOptionWord());
+        words.add(getFirstOptionWord());
+        words.add(getSecondOptionWord());
+        words.add(getThirdOptionWord());
+        words.add(getFourthOptionWord());
 
-        Collections.shuffle(mWords);
+        Collections.shuffle(words);
 
     }
 
     @Override
     public String toString() {
         return "WordCard{" +
-                "mainWord=" + mainWord.getWord() +
-                "} - ["+ mWords.get(0).getWord()+","+mWords.get(1).getWord()+","+mWords.get(2).getWord()+","+mWords.get(3).getWord()+"]";
+                "mainWord=" + mainWord +
+                ", words=" + words +
+                '}';
     }
 }

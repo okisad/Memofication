@@ -52,6 +52,7 @@ public class GameActivityReverse extends GameActivity{
             public void cardActionUp() {
 
             }
+
         });
 
 

@@ -2,8 +2,6 @@ package com.oktaysadoglu.memofication.jobs;
 
 import android.util.Log;
 
-import com.birbit.android.jobqueue.CancelReason;
-import com.birbit.android.jobqueue.CancelResult;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
@@ -11,11 +9,11 @@ import com.birbit.android.jobqueue.TagConstraint;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.db.Word;
 import com.oktaysadoglu.memofication.db.WordDao;
-import com.oktaysadoglu.memofication.events.WordCardViewEvent;
+import com.oktaysadoglu.memofication.events.WordCardViewDeclarationEvent;
 import com.oktaysadoglu.memofication.model.WordCard;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.ThreadMode;
+import org.greenrobot.eventbus.util.ExceptionToResourceMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +29,7 @@ public class WriteWordCardJob extends Job {
 
     private static String TAG = "WriteWordCardJob";
 
-    private Word mMainWord;
-
-    WordCard mWordCard;
-
-    private long id;
+    private WordDao wordDao;
 
     private int startPoint;
 
@@ -45,11 +39,10 @@ public class WriteWordCardJob extends Job {
 
         super(new Params(1).setRequiresNetwork(false).addTags("writeWordCard").setSingleId("writeWordCard").groupBy("Deck").persist());
 
-        /*this.id = id;*/
+        setStartPoint(startPoint);
 
-        this.startPoint = startPoint;
+        setEndPoint(endPoint);
 
-        this.endPoint = endPoint;
     }
 
 
@@ -60,19 +53,26 @@ public class WriteWordCardJob extends Job {
     @Override
     public void onRun() throws Throwable {
 
+        ArrayList<WordCard> wordCards = new ArrayList<>();
+
+        Log.e("my","onRun");
+
         while (startPoint<endPoint) {
 
-            mWordCard = new WordCard();
+            WordCard wordCard = new WordCard();
 
-            setMainWord();
+            wordCard.setMainWord(Memofication.getWordDao().load((long) startPoint));
 
-            WordCard wordCard = getWordCard();
+            if (wordCard.getMainWord() == null)
+                throw new Exception("Main Word is null");
+
+            wordCards.add(prepareWordCard(wordCard));
 
             startPoint++;
 
-            EventBus.getDefault().post(new WordCardViewEvent(wordCard));
-
         }
+
+        EventBus.getDefault().post(new WordCardViewDeclarationEvent(wordCards));
 
     }
 
@@ -88,81 +88,30 @@ public class WriteWordCardJob extends Job {
         return RetryConstraint.CANCEL;
     }
 
-    private void setMainWord() throws Throwable {
+    private WordCard prepareWordCard(WordCard wordCard){
 
-        mMainWord = Memofication.getWordDao().load((long) startPoint);
+        List<Word> wordsForOptions = getWordsForOptions(wordCard);
 
-        if (mMainWord != null) {
+        wordCard.setFirstOptionWord(wordsForOptions.get(0));
+        wordCard.setSecondOptionWord(wordsForOptions.get(1));
+        wordCard.setThirdOptionWord(wordsForOptions.get(2));
+        wordCard.setFourthOptionWord(wordsForOptions.get(3));
 
-            mWordCard.setMainWord(mMainWord);
+        wordCard.shuffle();
 
-        } else {
-
-            Memofication.getJobManager().cancelJobsInBackground(null,TagConstraint.ANY,"writeWordCard");
-
-            if (isCancelled()){
-
-                Log.e(TAG,"cancelled");
-
-                throw new Throwable();
-
-            }
-
-        }
+        return wordCard;
 
     }
 
-    /*private void listControl(List<Integer> integers) {
+    private List<Word> getWordsForOptions(WordCard wordCard) {
 
-        if (id % 100 == 0) {
-
-            Log.e("test", id + " : control ediliyor ");
-
-        }
-
-        for (int v = 0; v < integers.size(); v++) {
-
-            int s = integers.get(v);
-
-            for (int k = v + 1; k < integers.size(); k++) {
-
-                if (s == integers.get(k)) {
-
-                    Log.e("PROBLEM", "PROBLEM");
-
-                }
-
-            }
-
-        }
-
-    }*/
-
-    public WordCard getWordCard() {
-
-        List<Word> wordsForOptions = getWordsForOptions();
-
-        mWordCard.setFirstOptionWord(wordsForOptions.get(0));
-        mWordCard.setSecondOptionWord(wordsForOptions.get(1));
-        mWordCard.setThirdOptionWord(wordsForOptions.get(2));
-        mWordCard.setFourthOptionWord(wordsForOptions.get(3));
-
-        mWordCard.shuffle();
-
-        return mWordCard;
-
-    }
-
-
-    private List<Word> getWordsForOptions() {
+        setWordDao(Memofication.getWordDao());
 
         List<Word> wordsForOptions = new ArrayList<>();
 
-        WordDao wordDao = Memofication.getWordDao();
-
         int i = 0;
 
-        wordsForOptions.add(mMainWord);
+        wordsForOptions.add(wordCard.getMainWord());
 
         List<Word> candidateWords = new ArrayList<>();
 
@@ -170,17 +119,11 @@ public class WriteWordCardJob extends Job {
 
             boolean suitableForArray = true;
 
-            QueryBuilder queryBuilder = wordDao.queryBuilder();
+            Query suitableCandidateWordQuery = getWordDao().queryBuilder().where(WordDao.Properties.Type.eq(wordCard.getMainWord().getType()), WordDao.Properties.Id.notEq(wordCard.getMainWord().getId())).build();
 
-            queryBuilder.where(WordDao.Properties.Type.eq(mMainWord.getType()), WordDao.Properties.Id.notEq(mMainWord.getId()));
+            candidateWords = suitableCandidateWordQuery.list();
 
-            Query query = queryBuilder.build();
-
-            Random random = new Random();
-
-            candidateWords = query.list();
-
-            Word candidateWord = (Word) candidateWords.get(random.nextInt(candidateWords.size()));
+            Word candidateWord = (Word) candidateWords.get(new Random().nextInt(candidateWords.size()));
 
             for (int m = 0; m < wordsForOptions.size(); m++) {
 
@@ -202,19 +145,23 @@ public class WriteWordCardJob extends Job {
 
         }
 
-        /*Log.e(TAG, wordsForOptions.toString());*/
-
         return wordsForOptions;
 
     }
 
-    public long getWordId() {
-        return id;
+    public void setStartPoint(int startPoint) {
+        this.startPoint = startPoint;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setEndPoint(int endPoint) {
+        this.endPoint = endPoint;
     }
 
+    public WordDao getWordDao() {
+        return wordDao;
+    }
 
+    public void setWordDao(WordDao wordDao) {
+        this.wordDao = wordDao;
+    }
 }

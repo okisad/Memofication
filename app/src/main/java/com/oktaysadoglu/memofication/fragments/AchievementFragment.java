@@ -8,10 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.oktaysadoglu.memofication.Memofication;
 import com.oktaysadoglu.memofication.R;
 import com.oktaysadoglu.memofication.db.LastWordNumber;
@@ -57,22 +53,6 @@ public class AchievementFragment extends BaseFragment {
         LastWordNumberDao lastWordNumberDao = Memofication.getLastWordNumberDao();
 
         LastWordNumber lastWordNumber = lastWordNumberDao.load((long) 1);
-
-        Firebase ref = new Firebase("https://fiery-heat-3668.firebaseio.com");
-// Attach an listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    Word post = postSnapshot.getValue(Word.class);
-                    mTextView.setText(post.getWord());
-                }
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
 
         return view;
     }

@@ -1,4 +1,4 @@
-package com.oktaysadoglu.memofication.activities;
+package com.oktaysadoglu.memofication.activities.mainActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
